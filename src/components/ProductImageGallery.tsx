@@ -3,9 +3,9 @@ const ProductImageGallery = ({ imageUrls }: { imageUrls: string[] }) => {
 
   return (
     <ul>
-      {imageUrls.map((url) => (
-        <li key={url}>
-          <img src={url} />
+      {imageUrls.map((url, idx) => (
+        <li key={idx}>
+          <img src={url} data-testid={`img-${idx}`} />
         </li>
       ))}
     </ul>
