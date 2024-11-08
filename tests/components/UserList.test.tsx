@@ -23,3 +23,28 @@ describe('UserList V1', () => {
     });
   });
 });
+
+describe('UserList V2', () => {
+  it('should render message if no users', () => {
+    render(<UserList users={[]} />);
+    const message = screen.getByText(/no users/i);
+    expect(message).toBeInTheDocument();
+  });
+
+  it('should render list of users if there are users', () => {
+    const users: User[] = [
+      { id: 1, name: 'John' },
+      { id: 2, name: 'Mosh' },
+    ];
+    render(<UserList users={users} />);
+
+    const allUsers = screen.getAllByRole('link');
+    expect(allUsers.length).toBe(2);
+
+    users.forEach((user) => {
+      const link = screen.getByRole('link', { name: user.name });
+      expect(link).toBeInTheDocument();
+      expect(link).toHaveAttribute('href', `/users/${user.id}`);
+    });
+  });
+});
