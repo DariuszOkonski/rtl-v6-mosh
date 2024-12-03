@@ -35,29 +35,31 @@ describe('OrderStatusSelector v1', () => {
 });
 
 describe('OrderStatusSelector v2', () => {
-  it('should render New as the default value', () => {
+  const renderComponent = () => {
     render(
       <Theme>
         <OrderStatusSelector onChange={vi.fn()} />
       </Theme>
     );
 
-    const button = screen.getByRole('combobox');
+    return {
+      button: screen.getByRole('combobox'),
+      user: userEvent.setup(),
+      getOptions: () => screen.findAllByRole('option'),
+    };
+  };
+
+  it('should render New as the default value', () => {
+    const { button } = renderComponent();
     expect(button).toHaveTextContent(/new/i);
   });
 
   it('should render correct statuses', async () => {
-    render(
-      <Theme>
-        <OrderStatusSelector onChange={vi.fn()} />
-      </Theme>
-    );
+    const { user, button, getOptions } = renderComponent();
 
-    const button = screen.getByRole('combobox');
-    const user = userEvent.setup();
     await user.click(button);
 
-    const options = await screen.findAllByRole('option');
+    const options = await getOptions();
     expect(options).toHaveLength(3);
 
     const labels = options.map((option) => option.textContent);
